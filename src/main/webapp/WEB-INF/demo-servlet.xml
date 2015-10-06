@@ -12,6 +12,9 @@
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
     <context:component-scan base-package="org.pac4j.demo.spring" />
+    <context:component-scan base-package="org.pac4j.springframework.web" />
+
+    <context:property-placeholder location="classpath:application.properties"/>
 
     <bean id="viewResolver"
           class="org.springframework.web.servlet.view.UrlBasedViewResolver">
@@ -22,8 +25,11 @@
 
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/**" />
-            <bean class="org.pac4j.springframework.web.RequiresAuthenticationInterceptor" />
+            <mvc:mapping path="/facebook/*" />
+            <bean class="org.pac4j.springframework.web.RequiresAuthenticationInterceptor">
+                <constructor-arg name="config" ref="config" />
+                <constructor-arg name="clientName" value="FacebookClient" />
+            </bean>
         </mvc:interceptor>
     </mvc:interceptors>
 </beans>
