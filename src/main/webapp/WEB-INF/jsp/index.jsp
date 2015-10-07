@@ -6,7 +6,7 @@
 <a href="../../form/index.html">Protected url by form authentication: form/index.html</a><br />
 <a href="../../basicauth/index.html">Protected url by indirect basic auth: basicauth/index.html</a><br />
 <a href="../../cas/index.html">Protected url by CAS: cas/index.html</a><br />
-<a href="../../saml2/index.html">Protected url by SAML2: saml2/index.html</a><br />
+<a href="../../saml/index.html">Protected url by SAML2: saml/index.html</a><br />
 <a href="../../oidc/index.html">Protected url by OpenID Connect: oidc/index.html</a><br />
 <a href="../../protected/index.html">Protected url: protected/index.html</a><br />
 <br />

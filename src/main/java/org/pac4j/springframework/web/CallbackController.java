@@ -34,6 +34,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -57,10 +58,6 @@ public class CallbackController {
 
     @RequestMapping("/callback")
     public String callback(final HttpServletRequest request, final HttpServletResponse response) {
-
-        if (CommonHelper.isBlank(defaultUrl)) {
-            this.defaultUrl = Pac4jConstants.DEFAULT_URL_VALUE;
-        }
 
         final WebContext context = new J2EContext(request, response);
 
@@ -87,6 +84,12 @@ public class CallbackController {
         return redirectToOriginallyRequestedUrl(context);
     }
 
+    @PostConstruct
+    public void postContruct() {
+        if (CommonHelper.isBlank(defaultUrl)) {
+            this.defaultUrl = Pac4jConstants.DEFAULT_URL_VALUE;
+        }
+    }
     protected void saveUserProfile(final WebContext context, final UserProfile profile) {
         final ProfileManager manager = new ProfileManager(context);
         if (profile != null) {

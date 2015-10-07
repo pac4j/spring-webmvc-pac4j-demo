@@ -8,8 +8,12 @@
         <property name="clientID" value="343992089165-sp0l1km383i8cbm2j5nn20kbk5dk8hor.apps.googleusercontent.com" />
         <property name="secret" value="uR3D8ej1kIRPbqAFaxIE3HWh" />
         <property name="discoveryURI" value="https://accounts.google.com/.well-known/openid-configuration" />
+        <property name="customParams">
+            <map>
+                <entry key="prompt" value="consent" />
+            </map>
+        </property>
     </bean>
-    <!-- oidcClient.addCustomParam("prompt", "consent"); -->
 
     <bean id="samlConfig" class="org.pac4j.saml.client.SAML2ClientConfiguration">
         <constructor-arg name="keystorePath" value="resource:samlKeystore.jks" />
@@ -18,7 +22,7 @@
         <constructor-arg name="identityProviderMetadataPath" value="resource:testshib-providers.xml" />
         <property name="maximumAuthenticationLifetime" value="3600" />
         <property name="serviceProviderEntityId" value="urn:mace:saml:pac4j.org" />
-        <property name="serviceProviderMetadataPath" value="/tmp/sp-metadata.xml" />
+        <property name="serviceProviderMetadataPath" value="sp-metadata.xml" />
     </bean>
 
     <bean id="saml2Client" class="org.pac4j.saml.client.SAML2Client">
@@ -62,6 +66,8 @@
                 <constructor-arg name="secret" value="12345678901234567890123456789012" />
             </bean>
         </constructor-arg>
+        <property name="supportGetRequest" value="true" />
+        <property name="supportPostRequest" value="false" />
     </bean>
 
     <bean id="directBasicAuthClient" class="org.pac4j.http.client.direct.DirectBasicAuthClient">

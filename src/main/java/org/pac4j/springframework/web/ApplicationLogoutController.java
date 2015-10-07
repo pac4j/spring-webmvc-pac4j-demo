@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.regex.Pattern;
@@ -49,13 +50,6 @@ public class ApplicationLogoutController {
     @RequestMapping("/logout")
     public String applicationLogout(final HttpServletRequest request, final HttpServletResponse response) {
 
-        if (CommonHelper.isBlank(defaultUrl)) {
-            this.defaultUrl = Pac4jConstants.DEFAULT_URL_VALUE;
-        }
-        if (CommonHelper.isBlank(logoutUrlPattern)) {
-            this.logoutUrlPattern = Pac4jConstants.DEFAULT_LOGOUT_URL_PATTERN_VALUE;
-        }
-
         final WebContext context = new J2EContext(request, response);
         final ProfileManager manager = new ProfileManager(context);
         manager.logout();
@@ -72,6 +66,16 @@ public class ApplicationLogoutController {
         }
 
         return null;
+    }
+
+    @PostConstruct
+    public void postContruct() {
+        if (CommonHelper.isBlank(defaultUrl)) {
+            this.defaultUrl = Pac4jConstants.DEFAULT_URL_VALUE;
+        }
+        if (CommonHelper.isBlank(logoutUrlPattern)) {
+            this.logoutUrlPattern = Pac4jConstants.DEFAULT_LOGOUT_URL_PATTERN_VALUE;
+        }
     }
 
     public String getDefaultUrl() {
