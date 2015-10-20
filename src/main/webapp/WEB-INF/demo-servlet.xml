@@ -130,6 +130,7 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/facebook/*" />
+            <mvc:exclude-mapping path="/facebook/notprotected.html" />
             <bean class="org.pac4j.springframework.web.RequiresAuthenticationInterceptor">
                 <constructor-arg name="config" ref="config" />
                 <constructor-arg name="clientName" value="FacebookClient" />

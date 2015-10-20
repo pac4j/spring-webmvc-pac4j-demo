@@ -66,6 +66,13 @@ public class Application {
         return protectedIndex(request, response, map);
     }
 
+    @RequestMapping("/facebook/notprotected.html")
+    public String facebookNotProtected(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+        final WebContext context = new J2EContext(request, response);
+        map.put("profile", getProfile(context));
+        return "notProtected";
+    }
+
     @RequestMapping("/facebookadmin/index.html")
     public String facebookadmin(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
         return protectedIndex(request, response, map);
