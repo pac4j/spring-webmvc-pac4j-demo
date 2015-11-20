@@ -141,7 +141,7 @@ public class Application {
         return "jwt";
     }
 
-    @RequestMapping("/theForm")
+    @RequestMapping("/loginForm")
     public String theForm(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
         final WebContext context = new J2EContext(request, response);
         final FormClient formClient = (FormClient) config.getClients().findClient(context, "FormClient");

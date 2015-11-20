@@ -62,7 +62,7 @@
     </bean>
 
     <bean id="formClient" class="org.pac4j.http.client.indirect.FormClient">
-        <constructor-arg name="loginUrl" value="http://localhost:8080/theForm" />
+        <constructor-arg name="loginUrl" value="http://localhost:8080/loginForm" />
         <constructor-arg name="usernamePasswordAuthenticator" ref="testAuthenticator" />
     </bean>
 
@@ -71,11 +71,7 @@
     </bean>
 
     <bean id="casClient" class="org.pac4j.cas.client.CasClient">
-        <property name="casLoginUrl" value="http://localhost:8888/cas/login" />
-        <property name="casProtocol" value="CAS20" />
-        <property name="logoutHandler">
-            <bean class="org.pac4j.cas.logout.CasSingleSignOutHandler" />
-        </property>
+        <property name="casLoginUrl" value="https://casserverpac4j.herokuapp.com/login" />
     </bean>
 
     <bean id="parameterClient" class="org.pac4j.http.client.direct.ParameterClient">
