@@ -103,6 +103,11 @@ public class Application {
         return protectedIndex(request, response, map);
     }
 
+    @RequestMapping("/casrest/index.html")
+    public String casrest(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+        return protectedIndex(request, response, map);
+    }
+
     @RequestMapping("/saml/index.html")
     public String saml(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
         return protectedIndex(request, response, map);

@@ -70,6 +70,16 @@
         <constructor-arg name="usernamePasswordAuthenticator" ref="testAuthenticator" />
     </bean>
 
+    <bean id="casAuthenticator" class="org.pac4j.cas.credentials.authenticator.CasRestAuthenticator">
+        <constructor-arg name="casServerPrefixUrl" value="https://casserverpac4j.herokuapp.com/" />
+    </bean>
+
+    <bean id="casRestBasicAuthClient" class="org.pac4j.cas.client.rest.CasRestBasicAuthClient">
+        <constructor-arg name="headerName" value="Authorization" />
+        <constructor-arg name="prefixHeader" value="Basic " />
+        <constructor-arg name="authenticator" ref="casAuthenticator" />
+    </bean>
+
     <bean id="casClient" class="org.pac4j.cas.client.CasClient">
         <property name="casLoginUrl" value="https://casserverpac4j.herokuapp.com/login" />
     </bean>
@@ -102,6 +112,7 @@
                 <ref bean="casClient" />
                 <ref bean="parameterClient" />
                 <ref bean="directBasicAuthClient" />
+                <ref bean="casRestBasicAuthClient" />
             </list>
         </constructor-arg>
     </bean>
@@ -174,6 +185,13 @@
             <bean class="org.pac4j.springframework.web.RequiresAuthenticationInterceptor">
                 <constructor-arg name="config" ref="config" />
                 <constructor-arg name="clientName" value="CasClient" />
+            </bean>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/casrest/*" />
+            <bean class="org.pac4j.springframework.web.RequiresAuthenticationInterceptor">
+                <constructor-arg name="config" ref="config" />
+                <constructor-arg name="clientName" value="CasRestBasicAuthClient" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>

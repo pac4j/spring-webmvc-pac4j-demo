@@ -14,6 +14,7 @@
 <a href="jwt.html">Generate a JWT token</a> (after being authenticated)<br />
 <a href="/dba/index.html">Protected url by DirectBasicAuthClient: /dba/index.html</a> (POST the <em>Authorization</em> header with value: <em>Basic amxlbGV1OmpsZWxldQ==</em>) then by <a href="/dba/index.html">ParameterClient: /dba/index.html</a> (with request parameter: token=<em>jwt_generated_token</em>)<br />
 <a href="/rest-jwt/index.html">Protected url by ParameterClient: /rest-jwt/index.html</a> (with request parameter: token=<em>jwt_generated_token</em>)<br />
+<a href="/casrest/index.html">Protected url by CasRestBasicAuthClient: /casrest/index.html</a> (use login = pwd)<br />
 <br />
 <a href="logout?url=/">logout</a>
 <br /><br />
