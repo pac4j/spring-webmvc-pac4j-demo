@@ -27,6 +27,7 @@
         <property name="clientID" value="343992089165-sp0l1km383i8cbm2j5nn20kbk5dk8hor.apps.googleusercontent.com" />
         <property name="secret" value="uR3D8ej1kIRPbqAFaxIE3HWh" />
         <property name="discoveryURI" value="https://accounts.google.com/.well-known/openid-configuration" />
+        <property name="useNonce" value="true" />
         <property name="customParams">
             <map>
                 <entry key="prompt" value="consent" />
@@ -38,9 +39,9 @@
         <constructor-arg name="keystorePath" value="resource:samlKeystore.jks" />
         <constructor-arg name="keystorePassword" value="pac4j-demo-passwd" />
         <constructor-arg name="privateKeyPassword" value="pac4j-demo-passwd" />
-        <constructor-arg name="identityProviderMetadataPath" value="resource:testshib-providers.xml" />
+        <constructor-arg name="identityProviderMetadataPath" value="resource:metadata-okta.xml" />
         <property name="maximumAuthenticationLifetime" value="3600" />
-        <property name="serviceProviderEntityId" value="urn:mace:saml:pac4j.org" />
+        <property name="serviceProviderEntityId" value="http://localhost:8080/callback?client_name=SAML2Client" />
         <property name="serviceProviderMetadataPath" value="sp-metadata.xml" />
     </bean>
 

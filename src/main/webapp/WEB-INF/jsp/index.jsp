@@ -7,7 +7,7 @@
 <a href="form/index.html">Protected url by form authentication: form/index.html</a> (use login = pwd)<br />
 <a href="basicauth/index.html">Protected url by indirect basic auth: basicauth/index.html</a> (use login = pwd)<br />
 <a href="cas/index.html">Protected url by CAS: cas/index.html</a> (use login = pwd)<br />
-<a href="saml/index.html">Protected url by SAML2: saml/index.html</a><br />
+<a href="saml/index.html">Protected url by SAML2: saml/index.html</a> (use testpac4j at gmail.com / Pac4jtest)<br />
 <a href="oidc/index.html">Protected url by OpenID Connect: oidc/index.html</a> (use a real account)<br />
 <a href="protected/index.html">Protected url: protected/index.html</a> (won't start any login process)<br />
 <br />
@@ -25,7 +25,7 @@ profile : ${profile}
 <a href="${urlFacebook}">Authenticate with Facebook</a><br />
 <a href="${urlTwitter}">Authenticate with Twitter</a><br />
 <a href="${urlForm}">Authenticate with form</a><br />
-<a href="${urlBasicAuth}">Authenticate with basic auth</a><br />
+<a href="${urlBa}">Authenticate with basic auth</a><br />
 <a href="${urlCas}">Authenticate with CAS</a><br />
 <a href="${urlSaml}">Authenticate with SAML</a><br />
 <a href="${urlOidc}">Authenticate with OpenID Connect</a><br />
