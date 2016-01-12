@@ -89,7 +89,8 @@
         <constructor-arg name="parameterName" value="token" />
         <constructor-arg name="tokenAuthenticator">
             <bean class="org.pac4j.jwt.credentials.authenticator.JwtAuthenticator">
-                <constructor-arg name="secret" value="12345678901234567890123456789012" />
+                <constructor-arg name="signingSecret" value="12345678901234567890123456789012" />
+                <constructor-arg name="encryptionSecret" value="12345678901234567890123456789012" />
             </bean>
         </constructor-arg>
         <property name="supportGetRequest" value="true" />

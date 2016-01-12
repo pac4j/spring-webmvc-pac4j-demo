@@ -19,13 +19,3 @@
 <a href="logout?url=/">logout</a>
 <br /><br />
 profile : ${profile}
-<br /><br />
-<hr />
-
-<a href="${urlFacebook}">Authenticate with Facebook</a><br />
-<a href="${urlTwitter}">Authenticate with Twitter</a><br />
-<a href="${urlForm}">Authenticate with form</a><br />
-<a href="${urlBa}">Authenticate with basic auth</a><br />
-<a href="${urlCas}">Authenticate with CAS</a><br />
-<a href="${urlSaml}">Authenticate with SAML</a><br />
-<a href="${urlOidc}">Authenticate with OpenID Connect</a><br />
