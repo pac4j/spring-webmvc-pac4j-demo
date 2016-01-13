@@ -22,7 +22,7 @@
 
     <properties>
         <pac4j.version>1.8.4</pac4j.version>
-        <spring-webmvc-pac4j.version>1.0.2-SNAPSHOT</spring-webmvc-pac4j.version>
+        <spring-webmvc-pac4j.version>1.0.2</spring-webmvc-pac4j.version>
     </properties>
 
     <dependencies>
