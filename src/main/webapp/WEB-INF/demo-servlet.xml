@@ -23,10 +23,9 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
-    <bean id="oidClient" class="org.pac4j.oidc.client.OidcClient">
-        <property name="clientID" value="343992089165-sp0l1km383i8cbm2j5nn20kbk5dk8hor.apps.googleusercontent.com" />
-        <property name="secret" value="uR3D8ej1kIRPbqAFaxIE3HWh" />
-        <property name="discoveryURI" value="https://accounts.google.com/.well-known/openid-configuration" />
+    <bean id="oidClient" class="org.pac4j.oidc.client.GoogleOidcClient">
+        <property name="clientID" value="167480702619-8e1lo80dnu8bpk3k0lvvj27noin97vu9.apps.googleusercontent.com" />
+        <property name="secret" value="MhMme_Ik6IH2JMnAT6MFIfee" />
         <property name="useNonce" value="true" />
         <property name="customParams">
             <map>
@@ -119,11 +118,11 @@
         </constructor-arg>
     </bean>
 
-    <bean id="adminRoleAuthorizer" class="org.pac4j.core.authorization.RequireAnyRoleAuthorizer">
+    <bean id="adminRoleAuthorizer" class="org.pac4j.core.authorization.authorizer.RequireAnyRoleAuthorizer">
         <constructor-arg name="roles" value="ROLE_ADMIN" />
     </bean>
 
-    <bean id="customAuthorizer" class="org.pac4j.demo.spring.authorizer.CustomAuthorizer">
+    <bean id="customAuthorizer" class="org.pac4j.demo.spring.CustomAuthorizer">
     </bean>
 
     <bean id="config" class="org.pac4j.core.config.Config">
@@ -140,94 +139,94 @@
         <mvc:interceptor>
             <mvc:mapping path="/facebook/*" />
             <mvc:exclude-mapping path="/facebook/notprotected.html" />
-            <bean class="org.pac4j.springframework.web.RequiresAuthenticationInterceptor">
+            <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
-                <constructor-arg name="clientName" value="FacebookClient" />
+                <constructor-arg name="clients" value="FacebookClient" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/facebookadmin/*" />
-            <bean class="org.pac4j.springframework.web.RequiresAuthenticationInterceptor">
+            <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
-                <constructor-arg name="clientName" value="FacebookClient" />
-                <constructor-arg name="authorizerName" value="admin" />
+                <constructor-arg name="clients" value="FacebookClient" />
+                <constructor-arg name="authorizers" value="admin" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/facebookcustom/*" />
-            <bean class="org.pac4j.springframework.web.RequiresAuthenticationInterceptor">
+            <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
-                <constructor-arg name="clientName" value="FacebookClient" />
-                <constructor-arg name="authorizerName" value="custom" />
+                <constructor-arg name="clients" value="FacebookClient" />
+                <constructor-arg name="authorizers" value="custom" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/twitter/*" />
-            <bean class="org.pac4j.springframework.web.RequiresAuthenticationInterceptor">
+            <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
-                <constructor-arg name="clientName" value="TwitterClient,FacebookClient" />
+                <constructor-arg name="clients" value="TwitterClient,FacebookClient" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/form/*" />
-            <bean class="org.pac4j.springframework.web.RequiresAuthenticationInterceptor">
+            <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
-                <constructor-arg name="clientName" value="FormClient" />
+                <constructor-arg name="clients" value="FormClient" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/basicauth/*" />
-            <bean class="org.pac4j.springframework.web.RequiresAuthenticationInterceptor">
+            <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
-                <constructor-arg name="clientName" value="IndirectBasicAuthClient" />
+                <constructor-arg name="clients" value="IndirectBasicAuthClient" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/cas/*" />
-            <bean class="org.pac4j.springframework.web.RequiresAuthenticationInterceptor">
+            <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
-                <constructor-arg name="clientName" value="CasClient" />
+                <constructor-arg name="clients" value="CasClient" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/casrest/*" />
-            <bean class="org.pac4j.springframework.web.RequiresAuthenticationInterceptor">
+            <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
-                <constructor-arg name="clientName" value="CasRestBasicAuthClient" />
+                <constructor-arg name="clients" value="CasRestBasicAuthClient" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/saml/*" />
-            <bean class="org.pac4j.springframework.web.RequiresAuthenticationInterceptor">
+            <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
-                <constructor-arg name="clientName" value="SAML2Client" />
+                <constructor-arg name="clients" value="SAML2Client" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/oidc/*" />
-            <bean class="org.pac4j.springframework.web.RequiresAuthenticationInterceptor">
+            <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
-                <constructor-arg name="clientName" value="OidcClient" />
+                <constructor-arg name="clients" value="GoogleOidcClient" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/protected/*" />
-            <bean class="org.pac4j.springframework.web.RequiresAuthenticationInterceptor">
+            <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/dba/*" />
-            <bean class="org.pac4j.springframework.web.RequiresAuthenticationInterceptor">
+            <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
-                <constructor-arg name="clientName" value="DirectBasicAuthClient,ParameterClient" />
+                <constructor-arg name="clients" value="DirectBasicAuthClient,ParameterClient" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/rest-jwt/*" />
-            <bean class="org.pac4j.springframework.web.RequiresAuthenticationInterceptor">
+            <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
-                <constructor-arg name="clientName" value="ParameterClient" />
+                <constructor-arg name="clients" value="ParameterClient" />
             </bean>
         </mvc:interceptor>
     </mvc:interceptors>
