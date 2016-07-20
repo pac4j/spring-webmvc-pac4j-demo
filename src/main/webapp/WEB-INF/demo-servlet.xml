@@ -32,6 +32,9 @@
                 <entry key="prompt" value="consent" />
             </map>
         </property>
+        <property name="authorizationGenerator">
+            <bean class="org.pac4j.demo.spring.RoleAdminAuthGenerator" />
+        </property>
     </bean>
 
     <bean id="samlConfig" class="org.pac4j.saml.client.SAML2ClientConfiguration">
