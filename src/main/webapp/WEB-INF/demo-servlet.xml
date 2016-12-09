@@ -23,8 +23,8 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
-    <bean id="oidClient" class="org.pac4j.oidc.client.GoogleOidcClient">
-        <property name="clientID" value="167480702619-8e1lo80dnu8bpk3k0lvvj27noin97vu9.apps.googleusercontent.com" />
+    <bean id="oidcConfiguration" class="org.pac4j.oidc.config.OidcConfiguration">
+        <property name="clientId" value="167480702619-8e1lo80dnu8bpk3k0lvvj27noin97vu9.apps.googleusercontent.com" />
         <property name="secret" value="MhMme_Ik6IH2JMnAT6MFIfee" />
         <property name="useNonce" value="true" />
         <property name="customParams">
@@ -32,6 +32,10 @@
                 <entry key="prompt" value="consent" />
             </map>
         </property>
+    </bean>
+
+    <bean id="oidClient" class="org.pac4j.oidc.client.GoogleOidcClient">
+        <constructor-arg name="configuration" ref="oidcConfiguration" />
         <property name="authorizationGenerator">
             <bean class="org.pac4j.demo.spring.RoleAdminAuthGenerator" />
         </property>
@@ -83,16 +87,27 @@
         <constructor-arg name="authenticator" ref="casAuthenticator" />
     </bean>
 
+    <bean id="casConfiguration" class="org.pac4j.cas.config.CasConfiguration">
+        <property name="loginUrl" value="https://casserverpac4j.herokuapp.com/login" />
+    </bean>
     <bean id="casClient" class="org.pac4j.cas.client.CasClient">
-        <property name="casLoginUrl" value="https://casserverpac4j.herokuapp.com/login" />
+        <constructor-arg name="casConfiguration" ref="casConfiguration" />
+    </bean>
+
+    <bean id="secretSignatureConfiguration" class="org.pac4j.jwt.config.signature.SecretSignatureConfiguration">
+        <constructor-arg name="secret" value="${salt}" />
+    </bean>
+
+    <bean id="secretEncryptionConfiguration" class="org.pac4j.jwt.config.encryption.SecretEncryptionConfiguration">
+        <constructor-arg name="secret" value="${salt}" />
     </bean>
 
     <bean id="parameterClient" class="org.pac4j.http.client.direct.ParameterClient">
         <constructor-arg name="parameterName" value="token" />
         <constructor-arg name="tokenAuthenticator">
             <bean class="org.pac4j.jwt.credentials.authenticator.JwtAuthenticator">
-                <constructor-arg name="signingSecret" value="12345678901234567890123456789012" />
-                <constructor-arg name="encryptionSecret" value="12345678901234567890123456789012" />
+                <property name="signatureConfiguration" ref="secretSignatureConfiguration" />
+                <property name="encryptionConfiguration" ref="secretEncryptionConfiguration" />
             </bean>
         </constructor-arg>
         <property name="supportGetRequest" value="true" />

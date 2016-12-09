@@ -9,8 +9,11 @@ import org.pac4j.core.exception.HttpAction;
 import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.ProfileManager;
 import org.pac4j.http.client.indirect.FormClient;
+import org.pac4j.jwt.config.encryption.SecretEncryptionConfiguration;
+import org.pac4j.jwt.config.signature.SecretSignatureConfiguration;
 import org.pac4j.jwt.profile.JwtGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -22,6 +25,9 @@ import java.util.Optional;
 
 @Controller
 public class Application {
+
+    @Value("${salt}")
+    private String salt;
 
     @Autowired
     private Config config;
@@ -117,7 +123,11 @@ public class Application {
 
     @RequestMapping("/jwt.html")
     public String jwt(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
-        final JwtGenerator generator = new JwtGenerator("12345678901234567890123456789012");
+        final SecretSignatureConfiguration secretSignatureConfiguration = new SecretSignatureConfiguration(salt);
+        final SecretEncryptionConfiguration secretEncryptionConfiguration = new SecretEncryptionConfiguration(salt);
+        final JwtGenerator generator = new JwtGenerator();
+        generator.setSignatureConfiguration(secretSignatureConfiguration);
+        generator.setEncryptionConfiguration(secretEncryptionConfiguration);
         final WebContext context = new J2EContext(request, response);
         String token = "";
         final ProfileManager manager = new ProfileManager(context);
