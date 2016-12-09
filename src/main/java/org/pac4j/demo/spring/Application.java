@@ -12,6 +12,7 @@ import org.pac4j.http.client.indirect.FormClient;
 import org.pac4j.jwt.config.encryption.SecretEncryptionConfiguration;
 import org.pac4j.jwt.config.signature.SecretSignatureConfiguration;
 import org.pac4j.jwt.profile.JwtGenerator;
+import org.pac4j.springframework.web.LogoutController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,14 @@ import java.util.Optional;
 
 @Controller
 public class Application {
+
+    @Value("${pac4j.centralLogout.defaultUrl:#{null}}")
+    private String defaultUrl;
+
+    @Value("${pac4j.centralLogout.logoutUrlPattern:#{null}}")
+    private String logoutUrlPattern;
+
+    private LogoutController logoutController = new LogoutController();
 
     @Value("${salt}")
     private String salt;
@@ -162,5 +171,15 @@ public class Application {
         final WebContext context = new J2EContext(request, response);
         map.put("profiles", getProfiles(context));
         return "protectedIndex";
+    }
+
+    @RequestMapping("/centralLogout")
+    public void centralLogout(HttpServletRequest request, HttpServletResponse response) {
+        logoutController.setDefaultUrl(defaultUrl);
+        logoutController.setLogoutUrlPattern(logoutUrlPattern);
+        logoutController.setLocalLogout(false);
+        logoutController.setCentralLogout(true);
+        logoutController.setConfig(config);
+        logoutController.logout(request, response);
     }
 }
