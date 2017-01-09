@@ -91,7 +91,7 @@
         <property name="loginUrl" value="https://casserverpac4j.herokuapp.com/login" />
     </bean>
     <bean id="casClient" class="org.pac4j.cas.client.CasClient">
-        <constructor-arg name="casConfiguration" ref="casConfiguration" />
+        <constructor-arg name="configuration" ref="casConfiguration" />
     </bean>
 
     <bean id="secretSignatureConfiguration" class="org.pac4j.jwt.config.signature.SecretSignatureConfiguration">
