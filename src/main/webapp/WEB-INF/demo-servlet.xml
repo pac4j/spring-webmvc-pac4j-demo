@@ -164,7 +164,7 @@
             <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
                 <constructor-arg name="clients" value="FacebookClient" />
-                <constructor-arg name="authorizers" value="admin" />
+                <!--constructor-arg name="authorizers" value="admin" /-->
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
