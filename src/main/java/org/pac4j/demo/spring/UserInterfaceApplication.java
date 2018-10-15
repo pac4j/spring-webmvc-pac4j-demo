@@ -1,29 +1,40 @@
 package org.pac4j.demo.spring;
 
 import org.pac4j.core.client.Client;
+import org.pac4j.core.config.Config;
 import org.pac4j.core.context.J2EContext;
 import org.pac4j.core.context.Pac4jConstants;
 import org.pac4j.core.exception.HttpAction;
 import org.pac4j.http.client.indirect.FormClient;
-import org.pac4j.springframework.controller.AbstractController;
+import org.pac4j.springframework.helper.WebSecurityHelper;
 import org.pac4j.springframework.web.LogoutController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import java.util.Map;
 
 @Controller
-public class UserInterfaceApplication extends AbstractController {
+public class UserInterfaceApplication {
 
     @Value("${pac4j.centralLogout.defaultUrl:#{null}}")
     private String defaultUrl;
 
     @Value("${pac4j.centralLogout.logoutUrlPattern:#{null}}")
     private String logoutUrlPattern;
+
+    @Autowired
+    private Config config;
+
+    @Autowired
+    private WebSecurityHelper webSecurityHelper;
 
     private LogoutController logoutController;
 
@@ -45,8 +56,8 @@ public class UserInterfaceApplication extends AbstractController {
 
     @RequestMapping("/index.html")
     public String index(final Map<String, Object> map) throws HttpAction {
-        map.put("profiles", getProfiles());
-        final J2EContext context = getJ2EContext();
+        map.put("profiles", webSecurityHelper.getProfiles());
+        final J2EContext context = webSecurityHelper.getJ2EContext();
         map.put("sessionId", context.getSessionStore().getOrCreateSessionId(context));
         return "index";
     }
@@ -58,14 +69,14 @@ public class UserInterfaceApplication extends AbstractController {
 
     @RequestMapping("/facebook/notprotected.html")
     public String facebookNotProtected(final Map<String, Object> map) {
-        map.put("profiles", getProfiles());
+        map.put("profiles", webSecurityHelper.getProfiles());
         return "notProtected";
     }
 
     @RequestMapping("/facebookadmin/index.html")
     public String facebookadmin(final Map<String, Object> map) {
 
-        requireAnyRole("ROLE_ADMIN");
+        webSecurityHelper.requireAnyRole("ROLE_ADMIN");
 
         return protectedIndex(map);
     }
@@ -120,20 +131,25 @@ public class UserInterfaceApplication extends AbstractController {
     @RequestMapping("/forceLogin")
     @ResponseBody
     public void forceLogin() {
-        final Client client = config.getClients().findClient(request.getParameter(Pac4jConstants.DEFAULT_CLIENT_NAME_PARAMETER));
+        final Client client = config.getClients().findClient(webSecurityHelper.getJ2EContext().getRequestParameter(Pac4jConstants.DEFAULT_CLIENT_NAME_PARAMETER));
         try {
-            client.redirect(getJ2EContext());
+            client.redirect(webSecurityHelper.getJ2EContext());
         } catch (final HttpAction e) {
         }
     }
 
     protected String protectedIndex(final Map<String, Object> map) {
-        map.put("profiles", getProfiles());
+        map.put("profiles", webSecurityHelper.getProfiles());
         return "protectedIndex";
     }
 
     @RequestMapping("/centralLogout")
-    public void centralLogout() {
+    public void centralLogout(@Autowired HttpServletRequest request, @Autowired HttpServletResponse response) {
         logoutController.logout(request, response);
+    }
+
+    @ExceptionHandler(HttpAction.class)
+    public void httpAction() {
+        // do nothing
     }
 }
