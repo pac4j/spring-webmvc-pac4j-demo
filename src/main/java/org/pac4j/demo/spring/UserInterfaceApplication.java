@@ -6,7 +6,7 @@ import org.pac4j.core.context.J2EContext;
 import org.pac4j.core.context.Pac4jConstants;
 import org.pac4j.core.exception.HttpAction;
 import org.pac4j.http.client.indirect.FormClient;
-import org.pac4j.springframework.helper.WebSecurityHelper;
+import org.pac4j.springframework.helper.UISecurityHelper;
 import org.pac4j.springframework.web.LogoutController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +34,7 @@ public class UserInterfaceApplication {
     private Config config;
 
     @Autowired
-    private WebSecurityHelper webSecurityHelper;
+    private UISecurityHelper uiSecurityHelper;
 
     private LogoutController logoutController;
 
@@ -56,8 +56,8 @@ public class UserInterfaceApplication {
 
     @RequestMapping("/index.html")
     public String index(final Map<String, Object> map) throws HttpAction {
-        map.put("profiles", webSecurityHelper.getProfiles());
-        final J2EContext context = webSecurityHelper.getJ2EContext();
+        map.put("profiles", uiSecurityHelper.getProfiles());
+        final J2EContext context = uiSecurityHelper.getJ2EContext();
         map.put("sessionId", context.getSessionStore().getOrCreateSessionId(context));
         return "index";
     }
@@ -69,14 +69,14 @@ public class UserInterfaceApplication {
 
     @RequestMapping("/facebook/notprotected.html")
     public String facebookNotProtected(final Map<String, Object> map) {
-        map.put("profiles", webSecurityHelper.getProfiles());
+        map.put("profiles", uiSecurityHelper.getProfiles());
         return "notProtected";
     }
 
     @RequestMapping("/facebookadmin/index.html")
     public String facebookadmin(final Map<String, Object> map) {
 
-        webSecurityHelper.requireAnyRole("ROLE_ADMIN");
+        uiSecurityHelper.requireAnyRole("ROLE_ADMIN");
 
         return protectedIndex(map);
     }
@@ -131,15 +131,15 @@ public class UserInterfaceApplication {
     @RequestMapping("/forceLogin")
     @ResponseBody
     public void forceLogin() {
-        final Client client = config.getClients().findClient(webSecurityHelper.getJ2EContext().getRequestParameter(Pac4jConstants.DEFAULT_CLIENT_NAME_PARAMETER));
+        final Client client = config.getClients().findClient(uiSecurityHelper.getJ2EContext().getRequestParameter(Pac4jConstants.DEFAULT_CLIENT_NAME_PARAMETER));
         try {
-            client.redirect(webSecurityHelper.getJ2EContext());
+            client.redirect(uiSecurityHelper.getJ2EContext());
         } catch (final HttpAction e) {
         }
     }
 
     protected String protectedIndex(final Map<String, Object> map) {
-        map.put("profiles", webSecurityHelper.getProfiles());
+        map.put("profiles", uiSecurityHelper.getProfiles());
         return "protectedIndex";
     }
 
