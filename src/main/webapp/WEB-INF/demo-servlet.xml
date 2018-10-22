@@ -12,8 +12,7 @@
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
     <context:component-scan base-package="org.pac4j.demo.spring" />
-    <context:component-scan base-package="org.pac4j.springframework.web" />
-    <context:component-scan base-package="org.pac4j.springframework.helper" />
+    <context:component-scan base-package="org.pac4j.springframework" />
 
     <context:property-placeholder location="classpath:application.properties"/>
 
