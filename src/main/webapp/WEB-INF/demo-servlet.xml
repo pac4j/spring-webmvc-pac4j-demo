@@ -16,6 +16,8 @@
 
     <context:property-placeholder location="classpath:application.properties"/>
 
+    <bean id="actionAdapter" class="org.pac4j.core.http.adapter.JEEHttpActionAdapter" />
+
     <bean id="viewResolver"
           class="org.springframework.web.servlet.view.UrlBasedViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
@@ -41,7 +43,7 @@
         </property>
     </bean>
 
-    <bean id="samlConfig" class="org.pac4j.saml.client.SAML2ClientConfiguration">
+    <bean id="samlConfig" class="org.pac4j.saml.config.SAML2Configuration">
         <property name="keystoreResourceClasspath" value="samlKeystore.jks" />
         <property name="keystorePassword" value="pac4j-demo-passwd" />
         <property name="privateKeyPassword" value="pac4j-demo-passwd" />
@@ -157,6 +159,7 @@
             <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
                 <constructor-arg name="clients" value="FacebookClient" />
+                <property name="httpActionAdapter" ref="actionAdapter" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
@@ -164,6 +167,7 @@
             <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
                 <constructor-arg name="clients" value="FacebookClient" />
+                <property name="httpActionAdapter" ref="actionAdapter" />
                 <!--constructor-arg name="authorizers" value="admin" /-->
             </bean>
         </mvc:interceptor>
@@ -173,6 +177,7 @@
                 <constructor-arg name="config" ref="config" />
                 <constructor-arg name="clients" value="FacebookClient" />
                 <constructor-arg name="authorizers" value="custom" />
+                <property name="httpActionAdapter" ref="actionAdapter" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
@@ -180,6 +185,7 @@
             <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
                 <constructor-arg name="clients" value="TwitterClient,FacebookClient" />
+                <property name="httpActionAdapter" ref="actionAdapter" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
@@ -187,6 +193,7 @@
             <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
                 <constructor-arg name="clients" value="FormClient" />
+                <property name="httpActionAdapter" ref="actionAdapter" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
@@ -194,6 +201,7 @@
             <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
                 <constructor-arg name="clients" value="IndirectBasicAuthClient" />
+                <property name="httpActionAdapter" ref="actionAdapter" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
@@ -201,6 +209,7 @@
             <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
                 <constructor-arg name="clients" value="CasClient" />
+                <property name="httpActionAdapter" ref="actionAdapter" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
@@ -208,6 +217,7 @@
             <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
                 <constructor-arg name="clients" value="CasRestBasicAuthClient" />
+                <property name="httpActionAdapter" ref="actionAdapter" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
@@ -215,6 +225,7 @@
             <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
                 <constructor-arg name="clients" value="SAML2Client" />
+                <property name="httpActionAdapter" ref="actionAdapter" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
@@ -222,12 +233,14 @@
             <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
                 <constructor-arg name="clients" value="GoogleOidcClient" />
+                <property name="httpActionAdapter" ref="actionAdapter" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/protected/*" />
             <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
+                <property name="httpActionAdapter" ref="actionAdapter" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
@@ -235,6 +248,7 @@
             <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
                 <constructor-arg name="clients" value="DirectBasicAuthClient,ParameterClient" />
+                <property name="httpActionAdapter" ref="actionAdapter" />
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
@@ -242,6 +256,7 @@
             <bean class="org.pac4j.springframework.web.SecurityInterceptor">
                 <constructor-arg name="config" ref="config" />
                 <constructor-arg name="clients" value="ParameterClient" />
+                <property name="httpActionAdapter" ref="actionAdapter" />
             </bean>
         </mvc:interceptor>
     </mvc:interceptors>
