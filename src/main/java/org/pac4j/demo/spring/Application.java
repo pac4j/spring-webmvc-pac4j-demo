@@ -5,7 +5,9 @@ import org.pac4j.core.client.Client;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.context.JEEContext;
 import org.pac4j.core.context.Pac4jConstants;
+import org.pac4j.core.exception.http.ForbiddenAction;
 import org.pac4j.core.exception.http.HttpAction;
+import org.pac4j.core.exception.http.UnauthorizedAction;
 import org.pac4j.core.http.adapter.JEEHttpActionAdapter;
 import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.ProfileManager;
@@ -192,8 +194,13 @@ public class Application {
         return "jwt";
     }
 
-    @ExceptionHandler(HttpAction.class)
-    public void httpAction() {
-        // do nothing
+    @ExceptionHandler(UnauthorizedAction.class)
+    public String unauthorizedAction() {
+        return "error401";
+    }
+
+    @ExceptionHandler(ForbiddenAction.class)
+    public String forbiddenAction() {
+        return "error403";
     }
 }
