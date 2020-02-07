@@ -58,6 +58,7 @@
     <bean id="facebookClient" class="org.pac4j.oauth.client.FacebookClient">
         <constructor-arg name="key" value="145278422258960" />
         <constructor-arg name="secret" value="be21409ba8f39b5dae2a7de525484da8" />
+        <property name="callbackUrl" value="https://localhost/callback" />
     </bean>
 
     <bean id="twitterClient" class="org.pac4j.oauth.client.TwitterClient">
