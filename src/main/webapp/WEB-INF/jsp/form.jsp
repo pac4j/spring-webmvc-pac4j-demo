@@ -1,3 +1,4 @@
+<%@page session="false" %>
 <form action="${callbackUrl}?client_name=FormClient" method="POST">
 	<input type="text" name="username" value="" />
 	<p />

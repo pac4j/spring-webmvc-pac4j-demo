@@ -1,6 +1,6 @@
 package org.pac4j.demo.spring;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.pac4j.core.client.Client;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.context.JEEContext;
@@ -8,14 +8,14 @@ import org.pac4j.core.exception.http.ForbiddenAction;
 import org.pac4j.core.exception.http.HttpAction;
 import org.pac4j.core.exception.http.UnauthorizedAction;
 import org.pac4j.core.http.adapter.JEEHttpActionAdapter;
-import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.ProfileManager;
+import org.pac4j.core.profile.UserProfile;
 import org.pac4j.core.util.Pac4jConstants;
 import org.pac4j.http.client.indirect.FormClient;
 import org.pac4j.jwt.config.encryption.SecretEncryptionConfiguration;
 import org.pac4j.jwt.config.signature.SecretSignatureConfiguration;
 import org.pac4j.jwt.profile.JwtGenerator;
-import org.pac4j.springframework.annotation.ui.RequireAnyRole;
+import org.pac4j.springframework.annotation.RequireAnyRole;
 import org.pac4j.springframework.web.LogoutController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -69,8 +69,8 @@ public class Application {
 
     @RequestMapping("/index.html")
     public String index(final Map<String, Object> map) throws HttpAction {
-        map.put("profiles", profileManager.getAll(true));
-        map.put("sessionId", webContext.getSessionStore().getOrCreateSessionId(webContext));
+        map.put("profiles", profileManager.getProfiles());
+        map.put("sessionId", webContext.getSessionStore().getSessionId(webContext, false).orElse(null));
         return "index";
     }
 
@@ -81,7 +81,7 @@ public class Application {
 
     @RequestMapping("/facebook/notprotected.html")
     public String facebookNotProtected(final Map<String, Object> map) {
-        map.put("profiles", profileManager.getAll(true));
+        map.put("profiles", profileManager.getProfiles());
         return "notProtected";
     }
 
@@ -145,13 +145,13 @@ public class Application {
             final String name = webContext.getRequestParameter(Pac4jConstants.DEFAULT_CLIENT_NAME_PARAMETER)
                 .map(String::valueOf).orElse(StringUtils.EMPTY);
             final Client client = config.getClients().findClient(name).get();
-            JEEHttpActionAdapter.INSTANCE.adapt((HttpAction) client.getRedirectionAction(webContext).get(), webContext);
+            JEEHttpActionAdapter.INSTANCE.adapt(client.getRedirectionAction(webContext).get(), webContext);
         } catch (final HttpAction e) {
         }
     }
 
     protected String protectedIndex(final Map<String, Object> map) {
-        map.put("profiles", profileManager.getAll(true));
+        map.put("profiles", profileManager.getProfiles());
         return "protectedIndex";
     }
 
@@ -186,7 +186,7 @@ public class Application {
         String token = "";
         // by default, as we are in a REST API controller, profiles are retrieved only in the request
         // here, we retrieve the profile from the session as we generate the token from a profile saved by an indirect client (from the UserInterfaceApplication)
-        final Optional<CommonProfile> profile = profileManager.get(true);
+        final Optional<UserProfile> profile = profileManager.get(true);
         if (profile.isPresent()) {
             token = generator.generate(profile.get());
         }
