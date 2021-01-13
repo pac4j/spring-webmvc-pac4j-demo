@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.pac4j.core.client.Client;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.context.JEEContext;
+import org.pac4j.core.context.session.JEESessionStore;
 import org.pac4j.core.exception.http.ForbiddenAction;
 import org.pac4j.core.exception.http.HttpAction;
 import org.pac4j.core.exception.http.UnauthorizedAction;
@@ -44,7 +45,7 @@ public class Application {
     private Config config;
 
     @Autowired
-    private JEEContext webContext;
+    private JEEContext jeeContext;
 
     @Autowired
     private ProfileManager profileManager;
@@ -70,7 +71,7 @@ public class Application {
     @RequestMapping("/index.html")
     public String index(final Map<String, Object> map) throws HttpAction {
         map.put("profiles", profileManager.getProfiles());
-        map.put("sessionId", webContext.getSessionStore().getSessionId(webContext, false).orElse(null));
+        map.put("sessionId", JEESessionStore.INSTANCE.getSessionId(jeeContext, false).orElse(null));
         return "index";
     }
 
@@ -142,10 +143,10 @@ public class Application {
     @ResponseBody
     public void forceLogin() {
         try {
-            final String name = webContext.getRequestParameter(Pac4jConstants.DEFAULT_CLIENT_NAME_PARAMETER)
+            final String name = jeeContext.getRequestParameter(Pac4jConstants.DEFAULT_CLIENT_NAME_PARAMETER)
                 .map(String::valueOf).orElse(StringUtils.EMPTY);
             final Client client = config.getClients().findClient(name).get();
-            JEEHttpActionAdapter.INSTANCE.adapt(client.getRedirectionAction(webContext).get(), webContext);
+            JEEHttpActionAdapter.INSTANCE.adapt(client.getRedirectionAction(jeeContext, JEESessionStore.INSTANCE).get(), jeeContext);
         } catch (final HttpAction e) {
         }
     }
@@ -158,7 +159,7 @@ public class Application {
     @RequestMapping("/centralLogout")
     @ResponseBody
     public void centralLogout() {
-        logoutController.logout(webContext.getNativeRequest(), webContext.getNativeResponse());
+        logoutController.logout(jeeContext.getNativeRequest(), jeeContext.getNativeResponse());
     }
 
     @RequestMapping("/dba/index.html")
@@ -186,7 +187,7 @@ public class Application {
         String token = "";
         // by default, as we are in a REST API controller, profiles are retrieved only in the request
         // here, we retrieve the profile from the session as we generate the token from a profile saved by an indirect client (from the UserInterfaceApplication)
-        final Optional<UserProfile> profile = profileManager.get(true);
+        final Optional<UserProfile> profile = profileManager.getProfile();
         if (profile.isPresent()) {
             token = generator.generate(profile.get());
         }
