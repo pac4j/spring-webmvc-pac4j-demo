@@ -1,5 +1,0 @@
-<%@page session="false" %>
-<h1>Generate JWT token</h1>
-<a href="..">Back</a><br />
-<br /><br />
-token: ${token}<br />
