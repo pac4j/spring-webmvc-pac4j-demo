@@ -79,7 +79,7 @@
     </bean>
 
     <bean id="casConfiguration" class="org.pac4j.cas.config.CasConfiguration">
-        <property name="loginUrl" value="https://casserverpac4j.herokuapp.com/login" />
+        <property name="loginUrl" value="https://www.casserverpac4j.dev/login" />
     </bean>
 
     <bean id="casRestBasicAuthClient" class="org.pac4j.cas.client.rest.CasRestBasicAuthClient">
