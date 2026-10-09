@@ -83,9 +83,9 @@
     </bean>
 
     <bean id="casRestBasicAuthClient" class="org.pac4j.cas.client.rest.CasRestBasicAuthClient">
-        <constructor-arg name="headerName" value="Authorization" />
-        <constructor-arg name="prefixHeader" value="Basic " />
-        <constructor-arg name="configuration" ref="casConfiguration" />
+        <constructor-arg index="0" ref="casConfiguration" />
+        <constructor-arg index="1" value="Authorization" />
+        <constructor-arg index="2" value="Basic " />
     </bean>
 
     <bean id="casClient" class="org.pac4j.cas.client.CasClient">

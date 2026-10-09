@@ -3,6 +3,8 @@ package org.pac4j.demo.spring;
 import org.apache.commons.lang3.StringUtils;
 import org.pac4j.core.client.Client;
 import org.pac4j.core.config.Config;
+import org.pac4j.core.context.CallContext;
+import org.pac4j.core.context.session.SessionStore;
 import org.pac4j.core.exception.http.ForbiddenAction;
 import org.pac4j.core.exception.http.HttpAction;
 import org.pac4j.core.exception.http.UnauthorizedAction;
@@ -11,7 +13,6 @@ import org.pac4j.core.profile.UserProfile;
 import org.pac4j.core.util.Pac4jConstants;
 import org.pac4j.http.client.indirect.FormClient;
 import org.pac4j.jee.context.JEEContext;
-import org.pac4j.jee.context.session.JEESessionStore;
 import org.pac4j.jee.http.adapter.JEEHttpActionAdapter;
 import org.pac4j.jwt.config.encryption.SecretEncryptionConfiguration;
 import org.pac4j.jwt.config.signature.SecretSignatureConfiguration;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.util.Map;
 import java.util.Optional;
 
@@ -46,6 +47,9 @@ public class Application {
 
     @Autowired
     private JEEContext jeeContext;
+
+    @Autowired
+    private SessionStore sessionStore;
 
     @Autowired
     private ProfileManager profileManager;
@@ -71,7 +75,7 @@ public class Application {
     @RequestMapping("/index.html")
     public String index(final Map<String, Object> map) throws HttpAction {
         map.put("profiles", profileManager.getProfiles());
-        map.put("sessionId", JEESessionStore.INSTANCE.getSessionId(jeeContext, false).orElse(null));
+        map.put("sessionId", sessionStore.getSessionId(jeeContext, false).orElse(null));
         return "index";
     }
 
@@ -146,7 +150,7 @@ public class Application {
             final String name = jeeContext.getRequestParameter(Pac4jConstants.DEFAULT_CLIENT_NAME_PARAMETER)
                 .map(String::valueOf).orElse(StringUtils.EMPTY);
             final Client client = config.getClients().findClient(name).get();
-            JEEHttpActionAdapter.INSTANCE.adapt(client.getRedirectionAction(jeeContext, JEESessionStore.INSTANCE).get(), jeeContext);
+            JEEHttpActionAdapter.INSTANCE.adapt(client.getRedirectionAction(new CallContext(jeeContext, sessionStore)).get(), jeeContext);
         } catch (final HttpAction e) {
         }
     }
