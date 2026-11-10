@@ -136,7 +136,7 @@
             <plugin>
                 <groupId>org.eclipse.jetty.ee11</groupId>
                 <artifactId>jetty-ee11-maven-plugin</artifactId>
-                <version>12.1.14</version>
+                <version>12.1.15</version>
                 <configuration>
                     <webApp>
                         <contextPath>/</contextPath>
